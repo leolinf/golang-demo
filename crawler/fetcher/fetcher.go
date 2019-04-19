@@ -3,14 +3,15 @@ package fetcher
 import (
 	"bufio"
 	"fmt"
-	"golang.org/x/net/html/charset"
-	"golang.org/x/text/encoding"
-	"golang.org/x/text/encoding/unicode"
-	"golang.org/x/text/transform"
 	"io"
 	"io/ioutil"
 	"log"
 	"net/http"
+
+	"golang.org/x/net/html/charset"
+	"golang.org/x/text/encoding"
+	"golang.org/x/text/encoding/unicode"
+	"golang.org/x/text/transform"
 )
 
 func Fetch(url string) ([]byte, error) {
@@ -19,7 +20,7 @@ func Fetch(url string) ([]byte, error) {
 		return nil, err
 	}
 	defer resp.Body.Close()
-
+	fmt.Println(resp.StatusCode)
 	if resp.StatusCode != http.StatusOK {
 		return nil, fmt.Errorf("wrong data code: %s",
 			resp.StatusCode)
