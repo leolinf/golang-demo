@@ -7,6 +7,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"time"
 
 	"golang.org/x/net/html/charset"
 	"golang.org/x/text/encoding"
@@ -14,13 +15,17 @@ import (
 	"golang.org/x/text/transform"
 )
 
+var rateLimiter = time.Tick(1 * time.Second)
+
 func Fetch(url string) ([]byte, error) {
+	// 控制请求速率
+	<-rateLimiter
+	log.Println(get_header())
 	resp, err := http.Get(url)
 	if err != nil {
 		return nil, err
 	}
 	defer resp.Body.Close()
-	fmt.Println(resp.StatusCode)
 	if resp.StatusCode != http.StatusOK {
 		return nil, fmt.Errorf("wrong data code: %s",
 			resp.StatusCode)

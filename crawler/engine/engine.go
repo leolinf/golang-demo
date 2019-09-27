@@ -13,17 +13,25 @@ func Run(seeds ...Request) {
 	for len(requests) > 0 {
 		r := requests[0]
 		requests = requests[1:]
-		log.Printf("Fetching %s", r.Url)
-		body, err := fetcher.Fetch(r.Url)
+
+		ParserResult, err := worker(r)
 		if err != nil {
-			log.Printf("Fetch error "+
-				"fetcher url %s: %v", r.Url, err)
-			continue
+			log.Println(err)
 		}
-		ParserResult := r.ParserFunc(body)
 		requests = append(requests, ParserResult.Requests...)
 		for _, item := range ParserResult.Item {
 			log.Printf("Get item %v", item)
 		}
 	}
+}
+
+func worker(r Request) (ParserResult, error) {
+	log.Printf("Fetching %s", r.Url)
+	body, err := fetcher.Fetch(r.Url)
+	if err != nil {
+		log.Printf("Fetch error "+
+			"fetcher url %s: %v", r.Url, err)
+		return ParserResult{}, err
+	}
+	return r.ParserFunc(body), nil
 }
