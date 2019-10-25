@@ -9,7 +9,7 @@ func main() {
 	// 设置日志存放路径
 	logger.SetRollingDaily("/Users/fanlin/Golang/src/golang-demo/log", "test.log", "test.error.log")
 	// 设置日志级别
-	loglevel, _ := logger.LoggerLevelIndex("INFO")
+	loglevel, _ := logger.LoggerLevelIndex("DEBUG")
 	logger.SetLevel(loglevel)
 
 	logger.Debugf("Debug")
